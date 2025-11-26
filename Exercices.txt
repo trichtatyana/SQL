@@ -1,3 +1,84 @@
 Задание 6.
 Для каждого производителя, выпускающего ПК-блокноты c объёмом жесткого диска не менее 10 Гбайт, найти скорости таких ПК-блокнотов. Вывод: производитель, скорость.
 Решение:
+SELECT DISTINCT PRODUCT.MAKER, LAPTOP.speed
+from PRODUCT JOIN LAPTOP ON PRODUCT.MODEL=LAPTOP.MODEL 
+where LAPTOP.hd >=10
+
+Задание 7.
+Найдите номера моделей и цены всех имеющихся в продаже продуктов (любого типа) производителя B (латинская буква).
+Решение:
+SELECT a.model, price 
+FROM (SELECT model, price 
+FROM PC 
+UNION 
+SELECT model, price 
+FROM Laptop 
+UNION 
+SELECT model, price 
+FROM Printer) AS a JOIN 
+Product p ON a.model = p.model 
+WHERE p.maker = 'B'
+
+Задание 8.
+Найдите производителя, выпускающего ПК, но не ПК-блокноты.
+Решение:
+select distinct product.maker
+from product
+where type='pc'
+except
+select distinct product.maker
+from product
+where type='laptop'
+
+Задание 9.
+Найдите производителей ПК с процессором не менее 450 Мгц. Вывести: Maker
+Решение:
+SELECT DISTINCT product.maker
+FROM Product JOIN PC ON product.model = pc.model
+WHERE speed >= 450
+
+Задание 10.
+Найдите модели принтеров, имеющих самую высокую цену. Вывести: model, price
+Решение:
+SELECT model, price
+FROM printer
+WHERE price = (SELECT MAX(price) FROM printer)
+
+Задание 11.
+Найдите среднюю скорость ПК.
+Решение:
+SELECT AVG(speed) AS average_speed
+FROM pc
+
+Задание 12.
+Найдите среднюю скорость ПК-блокнотов, цена которых превышает 1000 дол.
+Решение:
+SELECT AVG(speed) AS average_speed
+FROM laptop
+WHERE price > 1000
+
+Задание 13.
+Найдите среднюю скорость ПК, выпущенных производителем A.
+Решение:
+SELECT AVG (pc.speed) AS avg_speed
+FROM pc
+JOIN product ON pc.model = product.model
+WHERE product.maker = 'A'
+
+Задание 14.
+Найдите класс, имя и страну для кораблей из таблицы Ships, имеющих не менее 10 орудий.
+Решение:
+SELECT Ships.class, Ships.name, Classes.country
+FROM Ships
+JOIN Classes ON Ships.class = Classes.class
+WHERE Classes.numGuns >= 10
+
+Задание 15.
+Найдите размеры жестких дисков, совпадающих у двух и более PC. Вывести: HD
+Решение:
+SELECT pc.hd
+FROM pc
+GROUP BY pc.hd
+HAVING COUNT(pc.hd) >= 2
+
